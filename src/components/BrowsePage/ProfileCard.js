@@ -5,7 +5,7 @@ const ProfileCard = ({ imageURL, name, age, country, eventResults }) => {
     <div className="card m-3 w-75">
       <div className="card-body">
         <div align="center" className="w-100 m-1">
-          <img src={`data:image/png;base64,${imageURL}`} alt="Profile" width="186" height="146" />
+          <img src={`${imageURL}`} alt="Profile" width="186" height="146" />
         </div>
         <div className="mx-3">
           <div className="row">

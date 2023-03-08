@@ -24,31 +24,33 @@ const CreateAthlete = ({ setPage, initialData }) => {
 
   const fileSelectHandler = async (e) => {
     const imageFile = e.target.files[0];
-    // const profileImgFile64=await getBase64(imageFile);
-    // console.log(profileImgFile64);
-    // // const uploadImageData = new FormData();
-    // uploadImageData.append("imageFile", imageFile, imageFile.name);
-      let reader = new FileReader();
-    reader.readAsDataURL(imageFile);
-    reader.onload = function () {
-        console.log ( "Result",reader.result);
-        setFormData((prev) => ({ ...prev, image: reader.result }));
-         
-    };
-    reader.onerror = function (error) {
-      console.log('Error: ', error);
-    };
-
-    // setFormData((prev) => ({ ...prev, image: uploadImageData }));
-
-    const objectUrl = URL.createObjectURL(imageFile);
-    setImagePreview(objectUrl);
+    const uploadImageData = new FormData();
+    uploadImageData.append("file", imageFile, imageFile.name);
+    uploadImageData.append("upload_preset", "Profile-Image");
+try {
+      const res = await fetch("https://api.cloudinary.com/v1_1/dqtvujllk/upload", {
+        method: "POST",
+        body: uploadImageData,
+      });
+      const data = await res.json();
+      console.log(data);
+      setImagePreview(data.url);
+      setFormData((prev) => ({ ...prev, image: data.url }));
+     }
+catch (error) {
+      console.log(error);
+      // Mock for test
+      return {
+        messages: "Successfully Created.",
+        value: "4",
+      };
+    }
   };
 
   const eventSelectHandler = (event) => {
     console.log(event);
     setEventsList((prev) => {
-      if (prev.indexOf(event) === -1) return [...prev, event];
+      if (prev.indexOf(event) === -1) return [...prev, JSON.parse(event)];
       return prev;
     });
   };
@@ -184,7 +186,15 @@ const CreateAthlete = ({ setPage, initialData }) => {
                       Select Events
                     </option>
                     {initialData.events?.map((event) => (
-                      <option key={event.id} value={event}>
+                      <option key={event.id} value={JSON.stringify({
+                        eventId: event.id,
+                        eventName: event.name,
+                        status: event.status,
+                        createdUser: event.createdUser,
+                        createdDate: event.createdDate,
+                        modifiedUser: null,
+                        modifiedDate: null,
+                      })}>
                         {event.name}
                       </option>
                     ))}

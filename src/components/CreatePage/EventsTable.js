@@ -14,7 +14,7 @@ const EventsTable = ({ events }) => {
           <tbody>
             {events.map((event) => (
               <tr key={event}>
-                <td>{event}</td>
+                <td>{event.eventName}</td>
                 <td>
                   <button className='btn btn-sm btn-secondary'>X</button>
                 </td>

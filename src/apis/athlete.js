@@ -11,7 +11,7 @@ export const getAllAthletes = async () => {
 export const searchAthlete = async (name, event, country, gender) => {
   try {
     const res = await fetch(
-      `http://localhost:8080/athlete/all?name=${name}&&event=${event}&&country=${country}&&gender=${gender}`
+      `http://localhost:8080/athlete/search?name=${name}&&event=${event}&&country=${country}&&gender=${gender}`
     );
     const data = res.json();
     return data;
